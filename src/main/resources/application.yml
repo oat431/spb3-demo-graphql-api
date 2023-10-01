@@ -1,0 +1,6 @@
+server:
+  port: 9091
+
+spring:
+  graphql:
+    path: /api/v1/demo2/graphql
