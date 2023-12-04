@@ -4,23 +4,17 @@ import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.stereotype.Controller;
 import panomete.playground.demogql.dto.DemoDto;
-
-import java.sql.Timestamp;
+import panomete.playground.demogql.exception.DemoGraphqlException;
 
 @Controller
 public class DemoGraphql {
     @QueryMapping
     public DemoDto getDemo(@Argument String name) {
-        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-        if(name == null) {
-            name = "World";
+        switch (name) {
+            case "not found" -> throw new DemoGraphqlException("data from graphql not found", 404);
+            case "bad request" -> throw new DemoGraphqlException("data from graphql is bad form", 400);
+            case "error" -> throw new DemoGraphqlException("external service currently down", 500);
+            default -> throw new DemoGraphqlException("unknown error",999);
         }
-        return new DemoDto(
-            "1",
-            name,
-            "This is a demo",
-            timestamp.toString(),
-            timestamp.toString()
-        );
     }
 }
